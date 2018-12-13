@@ -11,6 +11,7 @@ module.exports = {
 	run: function(tower) {
 		if (tower == undefined)
 		{
+			console.log("tower run executed with undefined tower");
 			return;
 		}
 		if(tower.energy == 0)
@@ -44,8 +45,9 @@ module.exports = {
 		}
 		var walls = tower.room.find(FIND_STRUCTURES,{
 			filter: (structure) => {
-				return (structure.structureType == STRUCTURE_WALL &&
-					structure.hits < 11000)
+				return ((structure.structureType == STRUCTURE_WALL &&
+					structure.hits < 11000) ||
+					(structure.structureType == STRUCTURE_RAMPART && structure.hits < 11000 ));
 			}});
 		//console.log( JSON.stringify( targets ) );
 
