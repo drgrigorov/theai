@@ -14,13 +14,13 @@ var roleBuilder = {
         var src = creep.memory.src;
         if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
-            creep.say('� B harvest');
+            creep.say('🔄 B harvest');
         }
         if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
             creep.memory.building = true;
             //get out of the way
             creep.moveTo(creep.room.controller)
-            creep.say('� B build');
+            creep.say('🚧 B build');
         }
 
         if(creep.memory.building) {
