@@ -1,5 +1,5 @@
 var roleTower = require('role.tower');
-var reg = require('screep.register');
+var reg = require('creep.register');
 var Reval = require('room.eval');
 
 module.exports = {

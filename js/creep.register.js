@@ -95,7 +95,7 @@ module.exports = {
 			    //console.log( name );
 			    if ( creeps == undefined || !creeps[name] )
 			    {
-					console.log( 'Creep ' + name + ' does not exist and should be spawned' );
+					//console.log( 'Creep ' + name + ' does not exist and should be spawned' );
 				    if ( mcreeps[name] )
 				    {
 					    //console.log('deleting old ' + name );
