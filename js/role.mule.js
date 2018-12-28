@@ -108,7 +108,7 @@ module.exports = {
 			  {filter: { structureType: STRUCTURE_TOWER }} );
 		  if ( towers.length == 0 )
 		  {
-			  console.log('not towers in the room');
+			  console.log('no towers in the room');
 			  creep.memory.state = 'buffering';
 			  return;
 		  }
@@ -154,6 +154,12 @@ module.exports = {
 		  if(creep.carry.energy < creep.carryCapacity)
 		  {
 			  creep.memory.state = 'collecting';
+		  }
+		  else if ( creep.room.find( FIND_MY_STRUCTURES, 
+			  { filter: (structure) => { 
+				  return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity); }} ).length )
+		  {
+		      creep.memory.state = 'supply';
 		  }
 		  else
 		  {
