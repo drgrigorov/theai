@@ -93,9 +93,9 @@ module.exports = {
 		    {
 			    var name = role + i;
 			    //console.log( name );
-			    if ( !creeps[name] )
+			    if ( creeps == undefined || !creeps[name] )
 			    {
-				   //console.log( 'Creep ' + name + ' does not exist and should be spawned' );
+					console.log( 'Creep ' + name + ' does not exist and should be spawned' );
 				    if ( mcreeps[name] )
 				    {
 					    //console.log('deleting old ' + name );
@@ -105,7 +105,7 @@ module.exports = {
 					    cfg[role].parts,
 					    name,
 					    {memory: {role: role, state: 'init'}});
-					if (res == ERR_NOT_ENOUGH_ENERGY )
+					if ( res == ERR_NOT_ENOUGH_ENERGY || res == ERR_BUSY )
 					{
 						return;
 					}

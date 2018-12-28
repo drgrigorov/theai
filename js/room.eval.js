@@ -9,7 +9,7 @@
 
 module.exports = {
 
-	run: function( mySpawn, sources ) {
+	run: function( mySpawn ) {
 		var myRoom = mySpawn.room;
 		var safeSrc = 0;
 		let n = 0;
@@ -21,6 +21,8 @@ module.exports = {
 		myRoom.visual.circle( lastPos1.x, lastPos1.y, {fill: '#bb0022'} );//, 
 		myRoom.createConstructionSite( lastPos1.x, lastPos1.y, STRUCTURE_CONTAINER );
 		myRoom.createFlag( lastPos1.x, lastPos1.y, 'upgSlot0' , COLOR_WHITE ); 
+
+		var sources = myRoom.find( FIND_SOURCES );
 
 		for ( let srcn in sources )
 		{
