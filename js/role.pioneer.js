@@ -24,9 +24,9 @@ module.exports = {
 				else
 				{
 					let conts = creep.room.find(FIND_STRUCTURES,
-						{filte: (str) => { 
+						{filter: (str) => { 
 							return (str.structureType == STRUCTURE_CONTAINER
-								&& structure.store.energy > 0 )}});
+								&& str.store.energy > 0 )}});
 					if ( conts.lenght > 0 )
 					{
 						for( let cont in conts )
@@ -41,16 +41,19 @@ module.exports = {
 					else if ( creep.room.memory.emergency )
 					{
 						var stor = creep.room.storage;
-						if ( stor.store.energy > 0 )
+						if ( stor != undefined )
 						{
-							//console.log( stor.store.energy );
-							let res = creep.withdraw(stor, RESOURCE_ENERGY);
-							if( res == ERR_NOT_IN_RANGE ) {
-								creep.moveTo(stor, {visualizePathStyle: {stroke: '#ffaa00'}});
-							}
-							else if ( res != OK )
+							if ( stor.store.energy > 0 )
 							{
-								console.log( res );
+								//console.log( stor.store.energy );
+								let res = creep.withdraw(stor, RESOURCE_ENERGY);
+								if( res == ERR_NOT_IN_RANGE ) {
+									creep.moveTo(stor, {visualizePathStyle: {stroke: '#ffaa00'}});
+								}
+								else if ( res != OK )
+								{
+									console.log( res );
+								}
 							}
 						}
 						else
