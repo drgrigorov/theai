@@ -1,0 +1,19 @@
+
+tasksWeb=/home/dimo/screeps/theai/ CD=. filter="*.js" {
+ js=js {
+  main.js
+  role.builder.js
+  role.defender.js
+  role.harvester.js
+  role.maint.js
+  role.miner.js
+  role.mule.js
+  role.pioneer.js
+  role.register.js
+  role.tower.js
+  role.upgrader.js
+  room.eval.js
+  room.mgr.js
+  creep.register.js
+ }
+}
