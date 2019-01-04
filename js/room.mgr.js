@@ -24,13 +24,14 @@ module.exports = {
 		}
 		let RoomStage = room.memory.stage;
 
-		let hostiles = room.find( FIND_HOSTILE_CREEPS ).length;
+		let hostiles = room.find( FIND_HOSTILE_CREEPS, { filter: function(o) { return o.owner.username != "Source Keeper"; } } ).length;
+		
 		if (hostiles)
 		{ 
 			if (room.memory.invasion == false)
 			{
 				console.log( 'invastion starts' );
-				Game.notify( 'invasion' );
+			//	Game.notify( 'invasion' );
 				room.memory.invasion = true;
 			}
 		}
@@ -39,7 +40,7 @@ module.exports = {
 			if (room.memory.invasion)
 			{
 				Game.notify( 'invasion ends' );
-				console.log( 'invastion ends' );
+			//	console.log( 'invastion ends' );
 				room.memory.invasion = false;
 			}
 		}
@@ -110,6 +111,10 @@ module.exports = {
 					room.memory.stage = 4;
 				}
 			}
+			else if ( RoomStage == 4 )
+			{
+					//Reval.run( mySpawn );
+			}
 		}
 
 		//Decide what to spawn in this room
@@ -125,14 +130,5 @@ module.exports = {
 			roleTower.run( towers[tower] );
 		}
 		
-		if(mySpawn.spawning) {
-			var spawningCreep = Game.creeps[mySpawn.spawning.name];
-			mySpawn.room.visual.text(
-				spawningCreep.memory.role,
-				mySpawn.pos.x + 1,
-				mySpawn.pos.y,
-				{align: 'left', opacity: 0.8});
-		}
-
 	}
 }

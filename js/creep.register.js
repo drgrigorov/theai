@@ -67,6 +67,17 @@ module.exports = {
 
     spawnDecision: function( spawn, creeps, mcreeps, stage )
     {
+		if(spawn.spawning) {
+			var spawningCreep = Game.creeps[spawn.spawning.name];
+			spawn.room.visual.text(
+				spawningCreep.memory.role,
+				spawn.pos.x + 1,
+				spawn.pos.y,
+				{align: 'left', opacity: 0.8});
+			//Spawn is currently working. No need to decide anything.
+			return;
+		}
+
 	    //console.log( '----' );
 		if (spawn.room.memory.invasion)
 		{
@@ -91,13 +102,15 @@ module.exports = {
 			}
 		    for (var i = 0; i < cfg[role].cnt(spawn.room); i++)
 		    {
-			    var name = role + i;
+			    var name = spawn.room.name + '_' + role + i;
 			    //console.log( name );
 			    if ( creeps == undefined || !creeps[name] )
 			    {
 					//console.log( 'Creep ' + name + ' does not exist and should be spawned' );
 				    if ( mcreeps[name] )
 				    {
+						//NOTE: there is a bug - deleting memory of currently spawning creeps.
+						//NOTE2: code does not reach here now when spawning.
 					    //console.log('deleting old ' + name );
 					    delete mcreeps[name];
 				    }
