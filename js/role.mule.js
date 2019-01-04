@@ -46,7 +46,7 @@ module.exports = {
 			  else
 			  {
 				  //we are not full, but there are no sources available.
-				  creep.memory.state = 'storing';
+				  creep.memory.state = 'idle';
 			  }
 		  }
 		  else
@@ -137,7 +137,7 @@ module.exports = {
 			  return;
 		  }
 		  stor = creep.room.storage;
-		  if ( stor && (stor.store.energy < 100000) )
+		  if ( stor && (stor.store.energy < 200000) )
 		  {
 			  if ( creep.transfer( stor, RESOURCE_ENERGY ) == ERR_NOT_IN_RANGE )
 			  {
