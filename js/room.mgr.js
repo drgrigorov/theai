@@ -9,10 +9,19 @@ module.exports = {
 		//console.log( "Processing room " + room.name );
 		if ( room.memory.spawn == undefined )
 		{
-			let spawns = room.find( FIND_STRUCTURES,
-				{ filter: function(struct) { return (struct.structureType == STRUCTURE_SPAWN) } } );
+			let spawns = room.find( FIND_MY_SPAWNS );
 			//Just put one spawn as room spawn.
-			room.memory.spawn = spawns[0].id;
+			if ( spawns.length != 0 )
+			{
+				//console.log( "We have spawns in room " + room.name );
+				room.memory.spawn = spawns[0].id;
+			}
+			else
+			{
+				//Not much to do without spawn
+				//console.log( "No spawn found in room " + room.name );
+				return;
+			}
 		}
 
 		let mySpawn = Game.getObjectById( room.memory.spawn );

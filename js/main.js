@@ -6,15 +6,26 @@ var roleMule = require('role.mule');
 var rolePioneer = require('role.pioneer');
 var roleHarvester = require('role.harvester');
 var roleDefender = require('role.defender');
+var roleScout = require('role.scout');
+var roleClaimer = require('role.claimer');
+var roleFounder = require('role.founder');
 
 var rmgr = require('room.mgr');
+var claim = require('room.claim');
 
 module.exports.loop = function () {
+
+	if( Memory.me == undefined ) { Memory.me = 'kr_eten'; }
 
 	var roomCreeps = {};
 	//Run creeps AI
 	for(var name in Game.creeps) {
 		var creep = Game.creeps[name];
+		if ( creep.spawning )
+		{
+			continue;
+		}
+
 		if (roomCreeps[creep.room.name] == undefined) { roomCreeps[creep.room.name] = {} };
 		roomCreeps[creep.room.name][ creep.name ] =  creep ;
 		if(creep.memory.role == 'miner') {
@@ -38,14 +49,31 @@ module.exports.loop = function () {
 		if(creep.memory.role == 'defender') {
 			roleDefender.run(creep);
 		}
+		if(creep.memory.role == 'scout') {
+			roleScout.run(creep);
+		}
+		if(creep.memory.role == 'claimer') {
+			roleClaimer.run(creep);
+		}
+		if(creep.memory.role == 'founder') {
+			roleFounder.run(creep);
+		}
+	}
+
+	if ( Game.flags['Claim'] != undefined )
+	{
+		claim.claim();
 	}
 	
 	//console.log( JSON.stringify( roomCreeps ) );
 
 	//Run room management
-	for ( let room in Game.rooms )
+	var myRooms = _.filter(Game.rooms, function(room) { return room.controller.owner.username == Memory.me; } );
+	for ( let room in myRooms )
 	{
-		rmgr.run( Game.rooms[room], roomCreeps[room] );
+		//console.log( room );
+		//console.log( myRooms[room] );
+		rmgr.run( myRooms[room], roomCreeps[myRooms[room].name] );
 	}
 	
 }

@@ -19,8 +19,41 @@ module.exports = {
 
 		var lastPos1 = pathArr1[ pathArr1.length - 2 ];//This will be an issue if path is shorter than 2 entries.
 		myRoom.visual.circle( lastPos1.x, lastPos1.y, {fill: '#bb0022'} );//, 
-		myRoom.createConstructionSite( lastPos1.x, lastPos1.y, STRUCTURE_CONTAINER );
-		myRoom.createFlag( lastPos1.x, lastPos1.y, 'upgSlot0' , COLOR_WHITE ); 
+		//myRoom.createConstructionSite( lastPos1.x, lastPos1.y, STRUCTURE_CONTAINER );
+		//myRoom.createFlag( lastPos1.x, lastPos1.y, 'upgSlot0' , COLOR_WHITE ); 
+
+		let cpos = myRoom.controller.pos;
+		let spots = [];
+		for ( let x = cpos.x - 1; x <= cpos.x + 1; x++ )
+		{
+			for ( let y = cpos.y - 1; y <= cpos.y + 1; y++ )
+			{
+				if (x != cpos.x || y != cpos.y )
+				{
+					let ter = myRoom.lookForAt( LOOK_TERRAIN, x, y );
+					if ( ter != 'wall' )
+					{
+						myRoom.visual.circle( x, y, {fill: '#00bb22'} );//, 
+						let dist = Math.abs( (mySpawn.pos.y - y) + (mySpawn.pos.x - x) );
+						//myRoom.visual.text( dist, x, y, {color: '#ffffff'} );//, 
+						spots.push( {x: x, y: y, dist: dist } );
+						//spots.y = y;
+						//spots.dist = dist;
+					}
+				}
+			}
+		}
+
+		let numUpgr = 5 - myRoom.memory.safeSrc;
+		//console.log(_.VERSION);
+		//console.log( JSON.stringify( spots ) );
+		spots = _.sortByOrder(spots, ['dist'], ['asc'], _.values );
+		//console.log( JSON.stringify( spots ) );
+		for ( let i = 0; i < numUpgr; i++ )
+		{
+			//myRoom.visual.text( i, spots[i].x, spots[i].y, {color: '#ffffff'} );//, 
+			myRoom.createFlag( spots[i].x, spots[i].y, 'upgSlot' + i , COLOR_WHITE ); 
+		}
 
 		var sources = myRoom.find( FIND_SOURCES );
 
@@ -63,7 +96,7 @@ module.exports = {
 				});
 				var lastPos = pathArr[ pathArr.length - 2 ];//This will be an issue if path is shorter than 2 entries.
 				myRoom.visual.circle( lastPos.x, lastPos.y, {fill: '#bb0022'} );//, 
-				myRoom.createConstructionSite( lastPos.x, lastPos.y, STRUCTURE_CONTAINER );
+				//myRoom.createConstructionSite( lastPos.x, lastPos.y, STRUCTURE_CONTAINER );
 				myRoom.createFlag( lastPos.x, lastPos.y, 'energy' + n++, COLOR_YELLOW ); 
 			}
 			myRoom.memory.safeSrc = safeSrc;

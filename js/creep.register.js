@@ -67,6 +67,11 @@ module.exports = {
 
     spawnDecision: function( spawn, creeps, mcreeps, stage )
     {
+		if ( creeps == undefined )
+		{
+			console.log( "wtf" );
+		}
+
 		if(spawn.spawning) {
 			var spawningCreep = Game.creeps[spawn.spawning.name];
 			spawn.room.visual.text(
@@ -92,7 +97,7 @@ module.exports = {
 
 	    var cfg = this.cfg[stage];
 		var prio = this.prio;
-	    for (var rolen in Object.keys(prio))
+	    for (var rolen = 0; rolen < prio.length; rolen++ )
 	    {
 			var role = prio[rolen];
 			//console.log( rolen + ' ' + role);
@@ -111,8 +116,9 @@ module.exports = {
 				    {
 						//NOTE: there is a bug - deleting memory of currently spawning creeps.
 						//NOTE2: code does not reach here now when spawning.
+						//NOTE3: even note2 did not fix the issue.
 					    //console.log('deleting old ' + name );
-					    delete mcreeps[name];
+					    //delete mcreeps[name];
 				    }
 				    var res = spawn.spawnCreep(
 					    cfg[role].parts,
@@ -126,6 +132,21 @@ module.exports = {
 			    }
 		    }
 	    }
+
+		if ( Game.flags['Populate'] != undefined )
+		{
+			if ( creeps != undefined && creeps['founder'] == undefined )
+			{
+				var res = spawn.spawnCreep(
+					[WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE],
+					'founder',
+					{memory: {role: 'founder', state: 'init'}, rName: Game.flags['Populate'].room.name});
+				if ( res == ERR_NOT_ENOUGH_ENERGY || res == ERR_BUSY )
+				{
+					return;
+				}
+			}
+		}
     }
     
 };
