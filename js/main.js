@@ -68,7 +68,11 @@ module.exports.loop = function () {
 	//console.log( JSON.stringify( roomCreeps ) );
 
 	//Run room management
-	var myRooms = _.filter(Game.rooms, function(room) { return room.controller.owner.username == Memory.me; } );
+	var myRooms = _.filter(Game.rooms,
+		function(room) {
+			return room.controller != undefined &&
+				room.controller.owner != undefined &&
+				room.controller.owner.username == Memory.me; } );
 	for ( let room in myRooms )
 	{
 		//console.log( room );

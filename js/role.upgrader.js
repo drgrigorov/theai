@@ -19,8 +19,8 @@ var roleUpgrader = {
 				creep.memory.slot = creep.name.slice(-1);
 				//creep.memory.slot = 0;
 			}
-			var dest = Game.flags['upgSlot' + creep.memory.slot];
-			var strAtFlag = creep.room.lookForAt( LOOK_STRUCTURES, dest );
+			var dest = creep.room.memory.u[creep.memory.slot];
+			var strAtFlag = creep.room.lookForAt( LOOK_STRUCTURES, dest.x, dest.y );
 			for ( let struct in strAtFlag )
 			{
 				if (strAtFlag[struct].structureType == STRUCTURE_CONTAINER)
@@ -31,15 +31,15 @@ var roleUpgrader = {
 			}
 			if ( creep.memory.cont == undefined )
 			{
-				console.log( 'container not found at flag [' + dest.name + ']' );
+				console.log( 'container not found at slot [' + dest.x, + ',' + dest.y + ']' );
 				return;
 			}
 			creep.memory.state = 'deploy';
 		}
 		else if( state == 'deploy' )
 		{
-			var dest = Game.flags['upgSlot' + creep.memory.slot];
-			if (creep.pos.isEqualTo( dest.pos) )
+			var dest = creep.room.memory.u[creep.memory.slot];
+			if ( creep.pos.x == dest.x && creep.pos.y == dest.y )
 			{
 				//Once reached change to energy_wait
 				creep.memory.state = 'draw';
@@ -48,7 +48,7 @@ var roleUpgrader = {
 			else
 			{
 				//Move to the room controller
-				creep.moveTo(dest, {visualizePathStyle: {stroke: '#ffffff'}});
+				creep.moveTo(dest.x, dest.y , {visualizePathStyle: {stroke: '#ffffff'}});
 			}
 		}
 		else if( state == 'draw' )

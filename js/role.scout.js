@@ -79,12 +79,32 @@ module.exports = {
 			}
 			else
 			{
-				console.log( "Destroying " + eStruct.id + " owner " + eStruct.owner.username );
+				//console.log( "Destroying " + eStruct.id + " owner " + eStruct.owner.username );
 				var res = creep.attack( eStruct );
 				if ( res == ERR_NOT_IN_RANGE )
 				{
-					creep.moveTo(eStruct,
+					let res = creep.moveTo(eStruct,
 						{visualizePathStyle: {stroke: '#ffffff'}});
+					if ( res == ERR_NO_PATH )
+					{
+						console.log( "no path" );
+						let nPath = creep.room.findPath( creep.pos, eStruct.pos,
+							{ ignoreDestructibleStructures: true } );
+						if ( nPath.length )
+						{
+							let objs = creep.room.lookAt( nPath[0].x, nPath[0].y );
+							console.log( JSON.stringify( objs ) );
+							let wall = _.findIndex( objs,
+								function (obj) {
+									return obj.type == 'structure' && obj.structure.structureType == 'constructedWall'; } );
+							if ( wall != undefined )
+							{
+								console.log( "=== found a wall: " + wall );
+								creep.memory.destroy = objs[wall].structure.id;
+							}
+							
+						}
+					}
 				}
 			}
 		}

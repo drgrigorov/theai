@@ -8,6 +8,10 @@
  */
 
 module.exports = {
+	run: function generateBuildMatrix( roomName )
+	{
+		
+	}
 
 	run: function( mySpawn ) {
 		var myRoom = mySpawn.room;
@@ -20,7 +24,6 @@ module.exports = {
 		var lastPos1 = pathArr1[ pathArr1.length - 2 ];//This will be an issue if path is shorter than 2 entries.
 		myRoom.visual.circle( lastPos1.x, lastPos1.y, {fill: '#bb0022'} );//, 
 		//myRoom.createConstructionSite( lastPos1.x, lastPos1.y, STRUCTURE_CONTAINER );
-		//myRoom.createFlag( lastPos1.x, lastPos1.y, 'upgSlot0' , COLOR_WHITE ); 
 
 		let cpos = myRoom.controller.pos;
 		let spots = [];
@@ -49,10 +52,15 @@ module.exports = {
 		//console.log( JSON.stringify( spots ) );
 		spots = _.sortByOrder(spots, ['dist'], ['asc'], _.values );
 		//console.log( JSON.stringify( spots ) );
+		numUpgr = (numUpgr<spots.length)?numUpgr:spots.length;
 		for ( let i = 0; i < numUpgr; i++ )
 		{
 			//myRoom.visual.text( i, spots[i].x, spots[i].y, {color: '#ffffff'} );//, 
-			myRoom.createFlag( spots[i].x, spots[i].y, 'upgSlot' + i , COLOR_WHITE ); 
+			if ( myRoom.memory.u == undefined )
+			{
+				myRoom.memory.u = [];
+			}
+			myRoom.memory.u[i] = { x: spots[i].x, y: spots[i].y };
 		}
 
 		var sources = myRoom.find( FIND_SOURCES );
@@ -97,7 +105,6 @@ module.exports = {
 				var lastPos = pathArr[ pathArr.length - 2 ];//This will be an issue if path is shorter than 2 entries.
 				myRoom.visual.circle( lastPos.x, lastPos.y, {fill: '#bb0022'} );//, 
 				//myRoom.createConstructionSite( lastPos.x, lastPos.y, STRUCTURE_CONTAINER );
-				myRoom.createFlag( lastPos.x, lastPos.y, 'energy' + n++, COLOR_YELLOW ); 
 			}
 			myRoom.memory.safeSrc = safeSrc;
 		}

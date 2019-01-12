@@ -20,6 +20,27 @@ module.exports = {
 			{
 				//Not much to do without spawn
 				//console.log( "No spawn found in room " + room.name );
+				//console.log( "Room " + room.name + " donor is " + room.memory.donor );
+				if ( room.memory.donor != undefined )
+				{
+					let myDonorRoom = Game.rooms[room.memory.donor];
+					if ( myDonorRoom != undefined )
+					{
+						let myDonorSpawn = Game.getObjectById( myDonorRoom.memory.spawn );
+						if ( myDonorSpawn != undefined )
+						{
+							reg.spawnDecision( room, rCreeps, myDonorSpawn );
+						}
+						else
+						{
+							console.log( "Donor spawn could not be found" );
+						}
+					}
+					else
+					{
+						console.log( "Donor room could not be found" );
+					}
+				}
 				return;
 			}
 		}
@@ -27,13 +48,16 @@ module.exports = {
 		let mySpawn = Game.getObjectById( room.memory.spawn );
 		let mrCreeps = Memory.creeps;
 
+		Reval.run( mySpawn );
+
 		if ( room.memory.stage == undefined )
 		{
 			room.memory.stage = 0;
 		}
 		let RoomStage = room.memory.stage;
 
-		let hostiles = room.find( FIND_HOSTILE_CREEPS, { filter: function(o) { return o.owner.username != "Source Keeper"; } } ).length;
+		let hostiles = room.find( FIND_HOSTILE_CREEPS,
+			{ filter: function(o) { return o.owner.username != "Source Keeper"; } } ).length;
 		
 		if (hostiles)
 		{ 
@@ -48,15 +72,15 @@ module.exports = {
 		{
 			if (room.memory.invasion)
 			{
-				Game.notify( 'invasion ends' );
-			//	console.log( 'invastion ends' );
+				//Game.notify( 'invasion ends' );
+				console.log( 'invastion ends' );
 				room.memory.invasion = false;
 			}
 		}
 
 		//merge this code with the role distribution maybe
 		let rmCreepNum = room.find( FIND_MY_CREEPS ).length;
-		if ( rmCreepNum == 0 && room.memory.emergency != true )
+		if ( rmCreepNum <= 1 && room.memory.emergency != true )
 		{
 			console.log('activating emergency mode');
 			room.memory.emergency = true;
@@ -75,6 +99,7 @@ module.exports = {
 		}
 		else
 		{
+
 			if ( RoomStage == 1 )
 			{
 				if ( room.controller.level >= 2 )
@@ -94,6 +119,19 @@ module.exports = {
 			}
 			else if( RoomStage == 2 )
 			{
+				if ( room.memory.donor != undefined )
+				{
+					//room does need a "donor" any more
+					room.memory.donor = undefined;
+
+					//remove the populate flag if present in the room
+					if (Game.flags['Populate'] != undefined &&
+						Game.flags['Populate'].pos.roomName == room.name) 
+					{
+						Game.flags['Populate'].remove;
+					}
+				}
+
 				if ( room.find(FIND_STRUCTURES, {
 					filter: (structure) => {
 						return (structure.structureType == STRUCTURE_EXTENSION)
@@ -117,7 +155,8 @@ module.exports = {
 			{
 				if ( room.controller.level >= 3 )
 				{
-					room.memory.stage = 4;
+
+					//room.memory.stage = 4;
 				}
 			}
 			else if ( RoomStage == 4 )
@@ -127,7 +166,7 @@ module.exports = {
 		}
 
 		//Decide what to spawn in this room
-		reg.spawnDecision( mySpawn, rCreeps, mrCreeps, RoomStage );
+		reg.spawnDecision( room, rCreeps );// mySpawn, rCreeps, mrCreeps, RoomStage );
 		
 		//Run tower AI
 		let towers = room.find(FIND_MY_STRUCTURES,{

@@ -1,5 +1,5 @@
 
-tasksWeb=/home/dimo/screeps/theai/ CD=. filter="*.js" {
+screepsAI=/home/quick/screeps/ CD=. filter="*.js" {
  js=js {
   main.js
   role.builder.js
@@ -12,8 +12,12 @@ tasksWeb=/home/dimo/screeps/theai/ CD=. filter="*.js" {
   role.register.js
   role.tower.js
   role.upgrader.js
+  role.scout.js
+  role.founder.js
+  role.claimer.js
   room.eval.js
   room.mgr.js
+  room.claim.js
   creep.register.js
  }
 }

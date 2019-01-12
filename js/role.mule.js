@@ -16,8 +16,9 @@ module.exports = {
 		  {
 			  creep.memory.slot = 0;
 		  }
-		  var dest = Game.flags['upgSlot' + creep.memory.slot];
-		  var strAtFlag = creep.room.lookForAt( LOOK_STRUCTURES, dest );
+		  //var dest = Game.flags['upgSlot' + creep.memory.slot];
+		  var dest = creep.room.memory.u[creep.memory.slot];
+		  var strAtFlag = creep.room.lookForAt( LOOK_STRUCTURES, dest.x, dest.y );
 		  for ( let struct in strAtFlag )
 		  {
 			  if (strAtFlag[struct].structureType == STRUCTURE_CONTAINER)
@@ -27,7 +28,8 @@ module.exports = {
 		  }
 		  if ( creep.memory.cont == undefined )
 		  {
-			  console.log( 'container not found at flag [' + dest.name + ']' );
+			  console.log( 'container not found at coord ' +
+				  creep.room.name + ' [' + dest.x + ',' + dest.y + ']' );
 			  return;
 		  }
 

@@ -3,22 +3,28 @@ module.exports = {
 	claim: function()
 	{
 		//TODO: fix the organisation of this method!
-		let croomName = Game.flags['Claim'].pos.roomName;
+		cFlag = Game.flags['Claim'];
+		let croomName = cFlag.pos.roomName;
 
 		clRoom = Game.rooms[croomName];
 		if (clRoom != undefined &&
+			clRoom.controller != undefined &&
+			clRoom.controller.owner != undefined &&
 			clRoom.controller.owner.username == Memory.me )
 		{
 			console.log( "Claim room is owned by me" );
-			let myPos = Game.flags['Claim'].pos;
+			let myPos = cFlag.pos;
+			let myDonor = cFlag.memory.donor;
 			//Create spawn at claim flag
 			if ( clRoom.find( STRUCTURE_SPAWN ).length == 0 )
 			{
 				let res = clRoom.createConstructionSite( myPos.x, myPos.y, STRUCTURE_SPAWN, clRoom.name + '_Spawn1' );
 				if ( res == OK )
 				{
+					//This will be room exporting creeps to the new one
+					clRoom.memory.donor = myDonor;
 					//Remove claim flag
-					Game.flags['Claim'].remove();
+					cFlag.remove();
 					//Set populate flag
 					clRoom.createFlag( myPos, 'Populate' );
 				}
@@ -36,7 +42,7 @@ module.exports = {
 		}
 
 		console.log("Lets claim " + croomName );
-		//console.log( JSON.stringify( Game.flags['Claim'] ) );
+		//console.log( JSON.stringify( cFlag ) );
 		//console.log( JSON.stringify( croom ) );
 		let scout = Game.creeps['scout'];
 		let claimer = Game.creeps['claimer'];
@@ -54,6 +60,7 @@ module.exports = {
 				{
 					tmpDist = dist;
 					stRoom = Game.rooms[room];
+					cFlag.memory.donor = stRoom;
 				}
 			}
 		}

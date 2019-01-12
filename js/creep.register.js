@@ -65,8 +65,13 @@ module.exports = {
 		}
 	],
 
-    spawnDecision: function( spawn, creeps, mcreeps, stage )
+    spawnDecision: function( room, creeps, spawn )
     {
+		let stage = room.memory.stage;
+		let mcreeps = Memory.creeps;
+
+		if ( spawn == undefined ) { var spawn = Game.getObjectById( room.memory.spawn ); }
+
 		if ( creeps == undefined )
 		{
 			console.log( "wtf" );
@@ -84,7 +89,7 @@ module.exports = {
 		}
 
 	    //console.log( '----' );
-		if (spawn.room.memory.invasion)
+		if (room.memory.invasion)
 		{
 			//console.log('Invasion is active. Need to spawn defenders');
 			var res = spawn.spawnCreep(
@@ -105,9 +110,9 @@ module.exports = {
 			{
 				continue;
 			}
-		    for (var i = 0; i < cfg[role].cnt(spawn.room); i++)
+		    for (var i = 0; i < cfg[role].cnt(room); i++)
 		    {
-			    var name = spawn.room.name + '_' + role + i;
+			    var name = room.name + '_' + role + i;
 			    //console.log( name );
 			    if ( creeps == undefined || !creeps[name] )
 			    {
@@ -123,7 +128,7 @@ module.exports = {
 				    var res = spawn.spawnCreep(
 					    cfg[role].parts,
 					    name,
-					    {memory: {role: role, state: 'init'}});
+					    {memory: {role: role, state: 'init', hRoom: room.name}});
 					if ( res == ERR_NOT_ENOUGH_ENERGY || res == ERR_BUSY )
 					{
 						return;
