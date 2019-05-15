@@ -48,7 +48,7 @@ module.exports = {
 		let mySpawn = Game.getObjectById( room.memory.spawn );
 		let mrCreeps = Memory.creeps;
 
-		Reval.run( mySpawn );
+		//Reval.run( mySpawn );
 
 		if ( room.memory.stage == undefined )
 		{

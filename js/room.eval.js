@@ -8,10 +8,10 @@
  */
 
 module.exports = {
-	run: function generateBuildMatrix( roomName )
-	{
+//	run: function generateBuildMatrix( roomName )
+//	{
 		
-	}
+//	}
 
 	run: function( mySpawn ) {
 		var myRoom = mySpawn.room;

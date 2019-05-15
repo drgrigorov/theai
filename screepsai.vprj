@@ -1,5 +1,5 @@
 
-screepsAI=/home/quick/screeps/ CD=. filter="*.js" {
+screepsAI=/home/dimo/screeps/theai CD=. filter="*.js" {
  js=js {
   main.js
   role.builder.js
