@@ -63,14 +63,16 @@ module.exports = {
 		{
 			if (creep.memory.src == undefined)
 			{
-				creep.memory.src = creep.name.slice(-1);
+				var index = creep.name.slice(-1);
+				var sources = creep.room.find(FIND_SOURCES);
+				creep.memory.src = sources[index].id;
 			}
 			var src = creep.memory.src;
+			var toMine = Game.getObjectById( src );
 			//console.log('Miner role (src:' + src + ')' );
-			var sources = creep.room.find(FIND_SOURCES);
-			if(creep.harvest(sources[src]) == ERR_NOT_IN_RANGE) {
-				creep.say('deploying');
-				creep.moveTo(sources[src], {visualizePathStyle: {stroke: '#ffaa00'}});
+			if(creep.harvest( toMine ) == ERR_NOT_IN_RANGE) {
+				creep.say('deploy ' + src);
+				creep.moveTo( toMine, {visualizePathStyle: {stroke: '#ffaa00'}});
 			}
 		}
     }

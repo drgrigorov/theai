@@ -8,10 +8,19 @@
  */
 
 module.exports = {
-//	run: function generateBuildMatrix( roomName )
-//	{
-		
-//	}
+	//getRoomScore: function ( roomName ) {
+		//var sources = myRoom.find( FIND_SOURCES );
+		//var srcNum = sources.length;
+		//console.log( "Sources in room " + roomName + ": " + srcNum );
+
+		//var pathArr1 = myRoom.findPath( mySpawn.pos, myRoom.controller.pos,
+		//	{ignoreCreeps: true, igrnoreRoads: true} );
+	//}
+
+	//generateBuildMatrix: function ( roomName )
+	//{
+	//
+	//}
 
 	run: function( mySpawn ) {
 		var myRoom = mySpawn.room;

@@ -70,11 +70,17 @@ module.exports = {
 		let stage = room.memory.stage;
 		let mcreeps = Memory.creeps;
 
-		if ( spawn == undefined ) { var spawn = Game.getObjectById( room.memory.spawn ); }
+		var spawn;
+		if ( spawn == undefined ) { spawn = Game.getObjectById( room.memory.spawn ); }
+		if ( spawn == undefined )
+		{
+			console.log( "Spawn for room " + room.name + " can not be found [" + room.memory.spawn + "]" );
+			return;
+		}
 
 		if ( creeps == undefined )
 		{
-			console.log( "wtf" );
+			console.log( "We do not have any creeps" );
 		}
 
 		if(spawn.spawning) {
@@ -117,14 +123,14 @@ module.exports = {
 			    if ( creeps == undefined || !creeps[name] )
 			    {
 					//console.log( 'Creep ' + name + ' does not exist and should be spawned' );
-				    if ( mcreeps[name] )
-				    {
+				    //if ( mcreeps[name] )
+				    //{
 						//NOTE: there is a bug - deleting memory of currently spawning creeps.
 						//NOTE2: code does not reach here now when spawning.
 						//NOTE3: even note2 did not fix the issue.
 					    //console.log('deleting old ' + name );
 					    //delete mcreeps[name];
-				    }
+				    //}
 				    var res = spawn.spawnCreep(
 					    cfg[role].parts,
 					    name,

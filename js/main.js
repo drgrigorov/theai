@@ -15,7 +15,7 @@ var claim = require('room.claim');
 
 module.exports.loop = function () {
 
-	if( Memory.me == undefined ) { Memory.me = 'kr_eten'; }
+	if( Memory.me == undefined ) { Memory.me = 'Kreten'; }
 
 	var roomCreeps = {};
 	//Run creeps AI
