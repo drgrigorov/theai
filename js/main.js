@@ -12,6 +12,7 @@ var roleFounder = require('role.founder');
 
 var rmgr = require('room.mgr');
 var claim = require('room.claim');
+var Reval = require('room.eval');
 
 module.exports.loop = function () {
 
@@ -64,7 +65,7 @@ module.exports.loop = function () {
 	{
 		claim.claim();
 	}
-	
+
 	//console.log( JSON.stringify( roomCreeps ) );
 
 	//Run room management
@@ -78,6 +79,9 @@ module.exports.loop = function () {
 		//console.log( room );
 		//console.log( myRooms[room] );
 		rmgr.run( myRooms[room], roomCreeps[myRooms[room].name] );
+		if ( Memory.reval )
+		{
+			Reval.drawPlan( myRooms[room] );
+		}
 	}
-	
 }
