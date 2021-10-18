@@ -44,7 +44,6 @@ class FillCapacity extends Task {
 			}
 			else
 			{
-				this.log( "change" );
 				this.SetState( "store" );
 			}
 		}
@@ -73,7 +72,6 @@ class Upgrade extends Task {
 			}
 			else
 			{
-				this.log( "change" );
 				this.SetState( "store" );
 			}
 		}
@@ -87,10 +85,31 @@ class Upgrade extends Task {
 	}
 }
 
+class Harvest extends Task {
+	constructor( task ) {
+		super( task );
+	}
+	Execute( cr ) {
+		this.creep = cr;
+		if ( this.state == "new" ) {
+			//if creep empty go to get source
+			if ( ! cr.full() )
+			{
+				cr.Harvest();
+			}
+			else
+			{
+				this.Destroy();
+			}
+		}
+	}
+}
+
 var createTask = function( task )
 {
 	if ( task.name == 'fillCap' ) { return new FillCapacity( task ); }
 	if ( task.name == 'upgrade' ) { return new Upgrade( task ); }
+	if ( task.name == 'harvest' ) { return new Harvest( task ); }
 	return undefined;
 }
 

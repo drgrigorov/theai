@@ -9,18 +9,18 @@
 
 module.exports = {
     
-	prio: [ 'miner', 'pioneer', 'carrier', 'upgrader', 'maintainer', 'builder', 'upgrader' ],
+	prio: [ 'miner', 'peon', 'carrier', 'upgrader', 'maintainer', 'builder', 'upgrader' ],
 
 	cfg: [
 		{//0
 			miner: { cnt: function() { return 1; }, parts: [WORK,WORK,MOVE] }
 		},
 		{//1
-			pioneer: { cnt: function() { return 2; }, parts: [WORK,CARRY,MOVE,MOVE] },
+			peon: { cnt: function() { return 2; }, parts: [WORK,CARRY,MOVE,MOVE] },
 			miner: { cnt: function() { return 1; }, parts: [WORK,WORK,MOVE] }
 		},
 		{//2
-			pioneer: { cnt: function() { return 2; }, parts: [WORK,CARRY,MOVE,MOVE] },
+			peon: { cnt: function() { return 2; }, parts: [WORK,CARRY,MOVE,MOVE] },
 			miner: { cnt: function() { return 1; }, parts: [WORK,WORK,MOVE] }
 		},
 		{//3
@@ -34,7 +34,7 @@ module.exports = {
 				},
 				parts: [WORK,WORK,WORK,WORK,WORK,MOVE] },
 
-			pioneer: { cnt: function() { return 4; },
+			peon: { cnt: function() { return 4; },
 				parts: [WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE] },
 
 			maintainer: { cnt: function() { return 1; },
@@ -51,7 +51,7 @@ module.exports = {
 				},
 				parts: [WORK,WORK,WORK,WORK,WORK,MOVE] },
 
-			pioneer: { cnt: function() { return 4; },
+			peon: { cnt: function() { return 4; },
 				parts: [WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE] },
 
 			maintainer: { cnt: function() { return 0; },
@@ -74,6 +74,7 @@ module.exports = {
 		if ( spawn == undefined ) { spawn = Game.getObjectById( room.memory.spawn ); }
 		if ( spawn == undefined )
 		{
+			delete room.memory.spawn;
 			console.log( "Spawn for room " + room.name + " can not be found [" + room.memory.spawn + "]" );
 			return;
 		}

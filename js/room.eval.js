@@ -1,27 +1,6 @@
 
 module.exports = {
-
-	drawPlan: function( myRoom ) {
-		var rSpawns = myRoom.find( FIND_MY_STRUCTURES,{filter: { structureType: STRUCTURE_SPAWN }});
-		//var mySpawn = undefined;
-		if (rSpawns.length > 0)
-		{
-		    var mySpawn = rSpawns[0];
-		}
-		else
-		{
-		    return;
-		}
-		var safeSrc = 0;
-		let n = 0;
-
-		var pathArr1 = myRoom.findPath( mySpawn.pos, myRoom.controller.pos,
-			{ignoreCreeps: true, igrnoreRoads: true} );
-
-		var lastPos1 = pathArr1[ pathArr1.length - 2 ];//This will be an issue if path is shorter than 2 entries.
-		//myRoom.visual.circle( lastPos1.x, lastPos1.y, {fill: '#bb0022'} );//,
-		//myRoom.createConstructionSite( lastPos1.x, lastPos1.y, STRUCTURE_CONTAINER );
-
+	drawUpgradeSpots: function( myRoom, mySpawn ) {
 		let cpos = myRoom.controller.pos;
 		let spots = [];
 		for ( let x = cpos.x - 1; x <= cpos.x + 1; x++ )
@@ -59,6 +38,19 @@ module.exports = {
 			}
 			myRoom.memory.u[i] = { x: spots[i].x, y: spots[i].y };
 		}
+	},
+
+	drawSrcSlots( myRoom, mySpawn ) {
+
+		var safeSrc = 0;
+		let n = 0;
+
+		var pathArr1 = myRoom.findPath( mySpawn.pos, myRoom.controller.pos,
+			{ignoreCreeps: true, igrnoreRoads: true} );
+
+		var lastPos1 = pathArr1[ pathArr1.length - 2 ];//This will be an issue if path is shorter than 2 entries.
+		//myRoom.visual.circle( lastPos1.x, lastPos1.y, {fill: '#bb0022'} );//,
+		//myRoom.createConstructionSite( lastPos1.x, lastPos1.y, STRUCTURE_CONTAINER );
 
 		var sources = myRoom.find( FIND_SOURCES );
 
@@ -105,7 +97,6 @@ module.exports = {
 			}
 			myRoom.memory.safeSrc = safeSrc;
 		}
-
 		var stExt = { fill: '#3344ff' };
 		myRoom.visual.circle( mySpawn.pos.x - 1, mySpawn.pos.y - 1, stExt );
 		let range = 8;
@@ -115,6 +106,9 @@ module.exports = {
 
 		myRoom.visual.rect( mySpawn.pos.x - range, mySpawn.pos.y - range, range*2, range*2,	stRangeGood );
 
+	},
+
+	drawCost: function( myRoom, mySpawn ) {
         const roomName = myRoom.name;
 	    const terrain = new Room.Terrain(roomName);
         const matrix = new PathFinder.CostMatrix;
@@ -134,7 +128,6 @@ module.exports = {
             return cost;
         }
 
-
         var h2d = function (d) {return  ("00"+(Number(  Math.round(d)).toString(16))).slice(-2).toUpperCase()}
 
         // Fill CostMatrix with default terrain costs for future analysis:
@@ -143,10 +136,41 @@ module.exports = {
             const weight = getRegCost( {x,y}, 8, terrain );
             //matrix.set(x, y, weight);
             var clr = '#' + h2d(Math.min(4 * weight,255)) + h2d(255 - Math.min(4*weight,255)) + '99';
-            if ( weight < 30) {
-                //console.log( clr );
-                visual.text(weight, x, y, {backgroundColor: clr });
+            if ( weight < 30 ) {
+				if (!(mySpawn.pos.x === x && mySpawn.pos.y === y)) {
+					//console.log( clr );
+					visual.text(weight, x, y, {backgroundColor: clr });
+				}
+				else
+				{
+					visual.text(weight, x, y );
+				}
             }
         }}
+	},
+
+	drawPlan: function( myRoom ) {
+		var rSpawns = myRoom.find( FIND_MY_STRUCTURES,{filter: { structureType: STRUCTURE_SPAWN }});
+		if (rSpawns.length === 0)
+		{
+		    return;
+		}
+
+		var mySpawn = rSpawns[0];
+
+		if ( Memory.reval.drawUpg )
+		{
+			this.drawUpgradeSpots( myRoom, mySpawn );
+		}
+
+		if ( Memory.reval.drawSrc )
+		{
+			this.drawSrcSlots( myRoom, mySpawn );
+		}
+
+		if ( Memory.reval.drawCost )
+		{
+			this.drawCost( myRoom, mySpawn );
+		}
 	}
 };

@@ -48,8 +48,6 @@ module.exports = {
 		let mySpawn = Game.getObjectById( room.memory.spawn );
 		let mrCreeps = Memory.creeps;
 
-		//Reval.run( mySpawn );
-
 		if ( room.memory.stage == undefined )
 		{
 			room.memory.stage = 0;
@@ -86,6 +84,30 @@ module.exports = {
 			room.memory.emergency = true;
 		}
 
+		//console.log( room.isFullEnergy() );
+		//console.log( room.capacityPct() );
+		if ( room.hasIdlingCreeps() )
+		{
+			//console.log( "roommgr: there are idling creeps" );
+			if ( ! room.isFullEnergy() )
+			{
+				//console.log( "roommgr: room is not full energy" );
+				room.enqueueTask( { "name": "fillCap", "priority": 2 } );
+			}
+			else if ( room.hasSites() )
+			{
+				//console.log( "roommgr: there are construction sites" );
+			}
+			else {
+				//console.log( "roommgr: Nothing special to do - upgrade controller." );
+				room.enqueueTask( { "name": "upgrade", "priority": 3 } );
+				//Room capacity is fool we need to remove all fillCap tasks from the queues
+			}
+		}
+		//else
+		//{
+				//console.log( "roommgr: Everyone is busy" );
+		//}
 		if ( room.memory.emergency )
 		{
 			room.memory.stage = 1;
@@ -99,7 +121,6 @@ module.exports = {
 		}
 		else
 		{
-
 			if ( RoomStage == 1 )
 			{
 				if ( room.controller.level >= 2 )
@@ -147,7 +168,6 @@ module.exports = {
 							room.createConstructionSite( x + i, y + j, STRUCTURE_ROAD );
 						}
 					}
-					Reval.run( mySpawn );
 					room.memory.stage = 3;
 				}
 			}

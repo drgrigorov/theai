@@ -1,11 +1,3 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('role.tower');
- * mod.thing == 'a thing'; // true
- */
 
 module.exports = {
 	run: function(tower) {
@@ -56,8 +48,8 @@ module.exports = {
 			let ret = tower.repair(walls[target]);
 			if ( ret != OK )
 			{
-				//console.log('Failed to repair target id: ' + targets[target].id );
-				//console.log('reason: ' + ret );
+				console.log('Failed to repair target id: ' + targets[target].id );
+				console.log('reason: ' + ret );
 			}
 		}
 	}

@@ -40,6 +40,7 @@ Creep.prototype.getFull = function () {
 		return;
 	}
 	//this.log( "get energy" );
+	var stor = this.room.storage;
 	var sources = this.room.find(FIND_DROPPED_RESOURCES);
 	if (sources.length)
 	{
@@ -49,7 +50,7 @@ Creep.prototype.getFull = function () {
 		return;
 	}
 	let ruins = this.room.find(FIND_RUINS,
-			{ filter: function(r) { return r.store[RESOURCE_ENERGY] > 0; }
+		{ filter: function(r) { return r.store[RESOURCE_ENERGY] > 0; }
 		});
 	if ( ruins.length)
 	{
@@ -59,50 +60,37 @@ Creep.prototype.getFull = function () {
 		return;
 	}
 
-		let conts = this.room.find(FIND_STRUCTURES,
-			{filter: (str) => { 
-				return (str.structureType == STRUCTURE_CONTAINER
-					&& str.store.energy > 0 )}});
-		if ( conts.lenght > 0 )
+	let conts = this.room.find(FIND_STRUCTURES,
+		{filter: (str) => { 
+			return (str.structureType == STRUCTURE_CONTAINER
+				&& str.store.energy > 0 )}});
+	if ( conts.lenght > 0 )
+	{
+		for( let cont in conts )
 		{
-			for( let cont in conts )
-			{
-				let res = this.withdraw(conts[cont], RESOURCE_ENERGY);
-				if( res == ERR_NOT_IN_RANGE ) {
-					this.moveTo(conts[cont],
-						{visualizePathStyle: {stroke: '#ffaa00'}});
-				}
-			}
-			return;
-		}
-		else// if ( this.room.memory.emergency )
-		{
-			var stor = this.room.storage;
-			if ( stor != undefined )
-			{
-				if ( stor.store.energy > 0 )
-				{
-					//this.log( stor.store.energy );
-					let res = this.withdraw(stor, RESOURCE_ENERGY);
-					if( res == ERR_NOT_IN_RANGE ) {
-						this.moveTo(stor, {visualizePathStyle: {stroke: '#ffaa00'}});
-					}
-					else if ( res != OK )
-					{
-						this.log( res );
-					}
-				}
-			}
-			else
-			{
-				this.setState( 'storing' );
+			let res = this.withdraw(conts[cont], RESOURCE_ENERGY);
+			if( res == ERR_NOT_IN_RANGE ) {
+				this.moveTo(conts[cont],
+					{visualizePathStyle: {stroke: '#ffaa00'}});
 			}
 		}
-		//else
-		//{
-			//we are not full, but there are no sources available.
-			//this.setState( 'storing' );
-		//}
+		return;
+	}
+	else if ( stor != undefined && stor.store.energy > 0 )
+	{
+		//this.log( stor.store.energy );
+		let res = this.withdraw(stor, RESOURCE_ENERGY);
+		if( res == ERR_NOT_IN_RANGE ) {
+			this.moveTo(stor, {visualizePathStyle: {stroke: '#ffaa00'}});
+		}
+		else if ( res != OK )
+		{
+			this.log( res );
+		}
+	}
+}
+
+Creep.prototype.Harvest = function () {
 }
 
 Creep.prototype.Upgrade = function () {
